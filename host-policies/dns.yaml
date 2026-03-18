@@ -1,0 +1,14 @@
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "dns-host-allow"
+spec:
+  nodeSelector: {}
+  egress:
+    - toEntities:
+      - world
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: ANY

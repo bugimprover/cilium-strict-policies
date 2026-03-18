@@ -1,0 +1,57 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: health-hosts-4240-allow
+  labels:
+    k8s-app: health-hosts
+    tier: system
+spec:
+  nodeSelector: {}
+  ingress:
+  - fromEntities:
+    - remote-node
+    - kube-apiserver
+    - health
+    toPorts:
+    - ports:
+      - port: '4240'
+        protocol: TCP
+  egress:
+  - toEntities:
+    - health
+    - remote-node
+    toPorts:
+    - ports:
+      - port: '4240'
+        protocol: TCP
+
+---
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: health-pods-4240-allow
+  labels:
+    k8s-app: health-pods
+    tier: system
+spec:
+  endpointSelector: {}
+  ingress:
+  - fromEntities:
+    - host
+    - remote-node
+    - health
+    toPorts:
+    - ports:
+      - port: "4240"
+        protocol: TCP
+
+  egress:
+  - toEntities:
+    - host
+    - remote-node
+    - health
+    toPorts:
+    - ports:
+      - port: "4240"
+        protocol: TCP

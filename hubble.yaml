@@ -1,0 +1,97 @@
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "hubble-pods-allow"
+spec:
+  nodeSelector: {}
+  egress:
+    - toEndpoints:
+      - matchLabels:
+          k8s-app: hubble-relay
+          k8s:io.kubernetes.pod.namespace: kube-system
+      - matchLabels:
+          k8s-app: hubble-ui
+          k8s:io.kubernetes.pod.namespace: kube-system
+      toPorts:
+      - ports:
+        - port: "4222"
+          protocol: TCP
+      - ports:
+        - port: "8081"
+          protocol: TCP
+  # endpointSelector: {}
+  # ingress:
+  # - fromEntities:
+  #   - host
+  #   toPorts:
+  #   - ports:
+  #     - port: '4222'
+  #       protocol: TCP
+  #     - port: '8081'
+  #       protocol: TCP
+  # egress:
+  # - toEndpoints:
+  #   - matchLabels:
+  #       k8s-app: hubble-relay
+  #       k8s:io.kubernetes.pod.namespace: kube-system
+  #   - matchLabels:
+  #       k8s-app: hubble-ui
+  #       k8s:io.kubernetes.pod.namespace: kube-system
+  #   toPorts:
+  #   - ports:
+  #     - port: "4222"
+  #       protocol: TCP
+  #   - ports:
+  #     - port: "8081"
+  #       protocol: TCP
+
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "hubble-hosts-allow"
+spec:
+  endpointSelector:
+    matchLabels:
+      k8s-app: hubble-relay
+      k8s:io.kubernetes.pod.namespace: kube-system
+  egress:
+  - toEntities:
+    - kube-apiserver
+    - remote-node
+    toPorts:
+    - ports:
+      - port: '4244'
+        protocol: TCP
+
+
+
+
+Mar 15 00:11:51.715: kube-system/hubble-relay-57bd785c89-cg4d5:55566 (ID:48996) -> 192.168.4.182:4244 (remote-node) policy-verdict:none EGRESS AUDITED (TCP Flags: SYN)
+Mar 15 00:11:55.990: 10.244.5.161 (host) -> 10.244.2.134 (remote-node) policy-verdict:none EGRESS AUDITED (ICMPv4 Redirect(Host))
+Mar 15 00:11:55.998: 10.244.5.161 (remote-node) -> 10.244.2.134 (host) policy-verdict:none INGRESS AUDITED (ICMPv4 Redirect(Host))
+Mar 15 00:11:56.303: 10.244.5.161 (remote-node) -> 10.244.1.118 (host) policy-verdict:none INGRESS AUDITED (ICMPv4 Redirect(Host))
+Mar 15 00:11:56.306: 10.244.5.161 (host) -> 10.244.1.118 (remote-node) policy-verdict:none EGRESS AUDITED (ICMPv4 Redirect(Host))
+
+
+
+
+
+Mar 15 00:24:54.762 [hubble-relay-57bd785c89-cg4d5]: Error "rpc error: code = Unavailable desc = error reading from server: EOF" on 1 nodes: kube-m3
+Mar 15 00:24:56.267 [hubble-relay-57bd785c89-cg4d5]: Error "rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 192.168.4.189:4244: connect: connection refused\"" on 1 nodes: kube-m3
+Mar 15 00:31:17.350 [hubble-relay-57bd785c89-cg4d5]: Error "rpc error: code = Unavailable desc = error reading from server: EOF" on 1 nodes: kube-w3
+Mar 15 00:31:20.522: 10.244.6.87 (remote-node) -> 10.244.3.151 (host) policy-verdict:none INGRESS AUDITED (ICMPv4 Redirect(Host))
+Mar 15 00:31:18.351 [hubble-relay-57bd785c89-cg4d5]: Error "rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 192.168.4.183:4244: connect: connection refused\"" on 1 nodes: kube-w3
+Mar 15 00:31:26.302 [hubble-relay-57bd785c89-cg4d5]: Error "rpc error: code = Unavailable desc = error reading from server: EOF" on 1 nodes: kube-w4
+Mar 15 00:31:31.141: 10.244.0.211 (remote-node) -> 10.244.2.134 (host) policy-verdict:none INGRESS AUDITED (ICMPv4 Redirect(Host))
+Mar 15 00:31:32.129: 10.244.0.211 (remote-node) -> 10.244.3.151 (host) policy-verdict:none INGRESS AUDITED (ICMPv4 Redirect(Host))
+Mar 15 00:31:26.354 [hubble-relay-57bd785c89-cg4d5]: Error "rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 192.168.4.184:4244: connect: connection refused\"" on 1 nodes: kube-w4
+Mar 15 00:31:56.303: kube-system/hubble-relay-57bd785c89-cg4d5:49004 (ID:48996) -> kube-system/coredns-668d6bf9bc-k2sjk:53 (ID:45090) policy-verdict:none EGRESS AUDITED (UDP)
+Mar 15 00:31:56.303: kube-system/hubble-relay-57bd785c89-cg4d5:49004 (ID:48996) -> kube-system/coredns-668d6bf9bc-k2sjk:53 (ID:45090) policy-verdict:none INGRESS AUDITED (UDP)
+Mar 15 00:31:56.303: kube-system/hubble-relay-57bd785c89-cg4d5:60111 (ID:48996) -> kube-system/coredns-668d6bf9bc-n7fwq:53 (ID:45090) policy-verdict:none EGRESS AUDITED (UDP)
+Mar 15 00:31:56.303: kube-system/hubble-relay-57bd785c89-cg4d5:60111 (ID:48996) -> kube-system/coredns-668d6bf9bc-n7fwq:53 (ID:45090) policy-verdict:none INGRESS AUDITED (UDP)
+Mar 15 00:31:56.303: kube-system/hubble-relay-57bd785c89-cg4d5:36442 (ID:48996) -> kube-system/coredns-668d6bf9bc-k2sjk:53 (ID:45090) policy-verdict:none EGRESS AUDITED (UDP)
+Mar 15 00:31:56.303: kube-system/hubble-relay-57bd785c89-cg4d5:36442 (ID:48996) -> kube-system/coredns-668d6bf9bc-k2sjk:53 (ID:45090) policy-verdict:none INGRESS AUDITED (UDP)
+Mar 15 00:31:56.304: kube-system/hubble-relay-57bd785c89-cg4d5:55494 (ID:48996) -> 192.168.4.184:4244 (host) policy-verdict:none EGRESS AUDITED (TCP Flags: SYN)
+Mar 15 00:31:56.304: kube-system/hubble-relay-57bd785c89-cg4d5:55494 (ID:48996) -> 192.168.4.184:4244 (host) policy-verdict:none INGRESS AUDITED (TCP Flags: SYN)
