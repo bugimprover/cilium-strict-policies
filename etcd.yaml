@@ -4,7 +4,7 @@ metadata:
   name: etcd
   labels:
     k8s-app: etcd
-    tier: system
+    tier: cluster
 spec:
   nodeSelector:
     # master nodes only
@@ -12,19 +12,19 @@ spec:
       node-role.kubernetes.io/control-plane: ''
   ingress:
   - fromEntities:
-    - kube-apiserver
+      - kube-apiserver
     toPorts:
-    - ports:
-      - port: '2380'
-        protocol: TCP
-      - port: '2379'
-        protocol: TCP
+      - ports:
+          - port: '2380'
+            protocol: TCP
+          - port: '2379'
+            protocol: TCP
   egress:
   - toEntities:
-    - kube-apiserver
+      - kube-apiserver
     toPorts:
-    - ports:
-      - port: '2380'
-        protocol: TCP
-      - port: '2379'
-        protocol: TCP
+      - ports:
+          - port: '2380'
+            protocol: TCP
+          - port: '2379'
+            protocol: TCP

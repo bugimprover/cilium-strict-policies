@@ -1,57 +1,67 @@
 apiVersion: "cilium.io/v2"
 kind: CiliumClusterwideNetworkPolicy
 metadata:
-  name: "coredns-53-allow"
+  name: "coredns-outside-allow"
+  labels:
+    k8s-app: coredns
+    tier: cluster
 spec:
-  nodeSelector: {}
+  endpointSelector:
+    matchLabels:
+      k8s-app: kube-dns
+      k8s:io.kubernetes.pod.namespace: kube-system
   egress:
     - toEntities:
       - world
       toPorts:
       - ports:
         - port: "53"
-          protocol: ANY
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
 
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumClusterwideNetworkPolicy
 metadata:
-  name: "coredns-test-allow"
+  name: "coredns-cluster-allow"
+  labels:
+    k8s-app: coredns
+    tier: cluster
 spec:
-  endpointSelector:
-    matchLabels:
-      k8s-app: kube-dns
-      k8s:io.kubernetes.pod.namespace: kube-system
+  endpointSelector: {} 
   egress:
-    - toEntities:
-      - world
+    - toEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": kube-system
+            "k8s-app": kube-dns
       toPorts:
-      - ports:
-        - port: "53"
-          protocol: ANY
-
----
-apiVersion: "cilium.io/v2"
-kind: CiliumNetworkPolicy
-metadata:
-  name: "coredns-kube-system-allow"
-spec:
-  endpointSelector:
-    matchLabels:
-      k8s-app: kube-dns
-      k8s:io.kubernetes.pod.namespace: kube-system
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
   ingress:
-    - fromEndpoints: []
+    - fromEntities:
+        - cluster
       toPorts:
-      - ports:
-        - port: "53"
-          protocol: ANY
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
 
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumClusterwideNetworkPolicy
 metadata:
   name: "coredns-probes-allow"
+  labels:
+    k8s-app: coredns
+    tier: cluster
 spec:
   nodeSelector: {}
   egress:

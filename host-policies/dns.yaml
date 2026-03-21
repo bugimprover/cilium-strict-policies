@@ -7,8 +7,8 @@ spec:
   nodeSelector: {}
   egress:
     - toEntities:
-      - world
+        - world
       toPorts:
-      - ports:
-        - port: "53"
-          protocol: ANY
+        - ports:
+            - port: "53"
+              protocol: ANY

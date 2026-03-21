@@ -4,23 +4,23 @@ metadata:
   name: vxlan
   labels:
     k8s-app: vxlan
-    tier: system
+    tier: cluster
 spec:
   nodeSelector: {}
   ingress:
-  - fromEntities:
-    - kube-apiserver
-    - host
-    - remote-node
-    toPorts:
-    - ports:
-      - port: '8472'
-        protocol: UDP
+    - fromEntities:
+        - kube-apiserver
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: '8472'
+              protocol: UDP
   egress:
-  - toEntities:
-    - kube-apiserver
-    - remote-node
-    toPorts:
-    - ports:
-      - port: '8472'
-        protocol: UDP
+    - toEntities:
+        - kube-apiserver
+        - remote-node
+      toPorts:
+        - ports:
+            - port: '8472'
+              protocol: UDP

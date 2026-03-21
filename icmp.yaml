@@ -10,14 +10,14 @@ metadata:
 spec:
   endpointSelector: {}
   ingress:
-  - fromEntities:
-    - remote-node
-    icmps:
-    - fields:
-      - type: 8
-        family: IPv4
-      - type: 0
-        family: IPv4
+    - fromEntities:
+        - remote-node
+      icmps:
+        - fields:
+            - type: 8
+              family: IPv4
+            - type: 0
+              family: IPv4
 
 
 ---
@@ -28,23 +28,23 @@ metadata:
 spec:
   nodeSelector: {}
   ingress:
-  - fromEntities:
-    - remote-node
-    - host
-    icmps:
-    - fields:
-      - type: 8
-        family: IPv4
-      - type: 0
-        family: IPv4
+    - fromEntities:
+        - remote-node
+        - host
+      icmps:
+        - fields:
+            - type: 8
+              family: IPv4
+            - type: 0
+              family: IPv4
   egress:
-  - toEntities:
-    - remote-node
-    - host
-    - health
-    icmps:
-    - fields:
-      - type: 8
-        family: IPv4
-      - type: 0
-        family: IPv4
+    - toEntities:
+        - remote-node
+        - host
+        - health
+      icmps:
+        - fields:
+            - type: 8
+              family: IPv4
+            - type: 0
+              family: IPv4
