@@ -11,20 +11,28 @@ spec:
     matchLabels:
       node-role.kubernetes.io/control-plane: ''
   ingress:
-  - fromEntities:
-      - kube-apiserver
+    - fromEntities:
+        - remote-node   # for peer
+      toPorts:
+        - ports:
+            - port: "2380"
+              protocol: TCP  
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "2379"
+              protocol: TCP
+  egress:
+  - toEntities:
+      - remote-node
     toPorts:
       - ports:
           - port: '2380'
             protocol: TCP
-          - port: '2379'
-            protocol: TCP
-  egress:
   - toEntities:
       - kube-apiserver
     toPorts:
       - ports:
-          - port: '2380'
-            protocol: TCP
           - port: '2379'
             protocol: TCP

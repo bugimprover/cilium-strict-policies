@@ -12,13 +12,13 @@ spec:
       k8s:io.kubernetes.pod.namespace: kube-system
   egress:
     - toEntities:
-      - world
+        - world
       toPorts:
-      - ports:
-        - port: "53"
-          protocol: UDP
-        - port: "53"
-          protocol: TCP
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
 
 ---
 apiVersion: "cilium.io/v2"
@@ -47,6 +47,7 @@ spec:
   ingress:
     - fromEntities:
         - cluster
+        - host
       toPorts:
         - ports:
             - port: "53"
@@ -66,13 +67,12 @@ spec:
   nodeSelector: {}
   egress:
     - toEndpoints:
-      - matchLabels:
-          k8s-app: kube-dns
-          k8s:io.kubernetes.pod.namespace: kube-system
+        - matchLabels:
+            k8s-app: kube-dns
+            k8s:io.kubernetes.pod.namespace: kube-system
       toPorts:
-      - ports:
-        - port: "8080"
-          protocol: TCP
-      - ports:
-        - port: "8181"
-          protocol: TCP
+        - ports:
+            - port: "8080"
+              protocol: TCP
+            - port: "8181"
+              protocol: TCP
