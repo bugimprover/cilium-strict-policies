@@ -19,7 +19,6 @@ spec:
             - type: 0
               family: IPv4
 
-
 ---
 apiVersion: cilium.io/v2
 kind: CiliumClusterwideNetworkPolicy
