@@ -24,13 +24,14 @@ Access to the cluster is provided via SSH port forwarding through the gateway to
 
 ```
 .
-├── etcd.yaml               # etcd peer and client traffic (control-plane only)
-├── vxlan.yaml              # VXLAN overlay traffic (port 8472/UDP)
-├── icmp.yaml               # ICMP health probes between nodes and endpoints
-├── kube-api.yaml           # kube-apiserver and kubelet access (port 6443, 10250)
-├── hubble.yaml             # Hubble relay, UI, and peer service
-├── health.yaml             # Cilium health checks (port 4240)
-├── coredns.yaml            # CoreDNS cluster and external resolution
+└── cluster-policies/
+    ├── etcd.yaml               # etcd peer and client traffic (control-plane only)
+    ├── vxlan.yaml              # VXLAN overlay traffic (port 8472/UDP)
+    ├── icmp.yaml               # ICMP health probes between nodes and endpoints
+    ├── kube-api.yaml           # kube-apiserver and kubelet access (port 6443, 10250)
+    ├── hubble.yaml             # Hubble relay, UI, and peer service
+    ├── health.yaml             # Cilium health checks (port 4240)
+    ├── coredns.yaml            # CoreDNS cluster and external resolution
 └── host-policies/
     ├── ssh.yaml            # SSH access to nodes (port 22)
     ├── ntp.yaml            # NTP time sync (port 123/UDP)
@@ -59,7 +60,7 @@ Access to the cluster is provided via SSH port forwarding through the gateway to
 ### Apply all policies
 
 ```bash
-kubectl apply -f .
+kubectl apply -f cluster-policies/
 kubectl apply -f host-policies/
 ```
 
