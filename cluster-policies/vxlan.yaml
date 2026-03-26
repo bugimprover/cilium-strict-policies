@@ -1,0 +1,28 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: vxlan
+  labels:
+    k8s-app: vxlan
+    tier: cluster
+spec:
+  nodeSelector: {}
+  ingress:
+    - fromEntities:
+        - kube-apiserver
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: '8472'
+              protocol: UDP
+  egress:
+    - toEntities:
+        - kube-apiserver
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: '8472'
+              protocol: UDP

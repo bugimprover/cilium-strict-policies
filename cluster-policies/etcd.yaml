@@ -1,0 +1,39 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: etcd
+  labels:
+    k8s-app: etcd
+    tier: cluster
+spec:
+  nodeSelector:
+    # master nodes only
+    matchLabels:
+      node-role.kubernetes.io/control-plane: ''
+  ingress:
+    - fromEntities:
+        - remote-node   # for peer
+      toPorts:
+        - ports:
+            - port: "2380"
+              protocol: TCP  
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "2379"
+              protocol: TCP
+  egress:
+  - toEntities:
+      - remote-node
+    toPorts:
+      - ports:
+          - port: '2380'
+            protocol: TCP
+  - toEntities:
+      - kube-apiserver
+    toPorts:
+      - ports:
+          - port: '2379'
+            protocol: TCP
